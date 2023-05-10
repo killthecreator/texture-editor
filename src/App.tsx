@@ -1,14 +1,12 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
+import { cn } from "./lib/utils";
 import * as THREE from "three";
-
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import Interface from "./components/Interface";
 import initScene from "./utils/initScene";
-import { RootState } from "./redux/store";
-import { cn } from "./lib/utils";
-
-import { useSelector } from "react-redux";
+import { SpinnerDiamond } from "spinners-react";
 
 function App() {
   const {
@@ -28,7 +26,6 @@ function App() {
   const bgImageRef = useRef<HTMLImageElement>(null);
 
   const [isCanvasLoading, setIsCanvasLoading] = useState(true);
-  const [isImageLoading, setIsImageLoading] = useState(true);
 
   const manager = useMemo(() => new THREE.LoadingManager(), []);
 
@@ -37,27 +34,25 @@ function App() {
     [manager]
   );
 
-  const overlay = useMemo(() => {
-    const overlay = textureLoader.load(
+  const alphaTexture = useMemo(() => {
+    const alphaTexture = textureLoader.load(
       `src/assets/${curPiece}/${curPiece}_overlay.png`
     );
-    overlay.encoding = THREE.sRGBEncoding;
-    return overlay;
+    alphaTexture.encoding = THREE.sRGBEncoding;
+    return alphaTexture;
   }, [curPiece, textureLoader]);
 
-  const light = useMemo(() => {
-    const light = textureLoader.load(
+  const lightTexture = useMemo(() => {
+    const lightTexture = textureLoader.load(
       `src/assets/${curPiece}/${curPiece}_light.png`
     );
-    light.encoding = THREE.sRGBEncoding;
-
-    return light;
+    lightTexture.encoding = THREE.sRGBEncoding;
+    return lightTexture;
   }, [curPiece, textureLoader]);
 
   const pattern = useMemo(() => {
     const pattern = textureLoader.load("src/assets/patterns/1_texture_3d.jpg");
     pattern.encoding = THREE.sRGBEncoding;
-
     pattern.center.set(0.5, 0.5);
     pattern.wrapS = pattern.wrapT = THREE.RepeatWrapping;
     return pattern;
@@ -67,38 +62,37 @@ function App() {
   pattern.offset.x = patternOffsetX;
   pattern.offset.y = patternOffsetY;
 
-  const geometry = useMemo(() => new THREE.PlaneGeometry(50, 50, 50), []);
-  const material = useMemo(
+  const plane = useMemo(() => new THREE.PlaneGeometry(50, 50, 50), []);
+  const lightMaterial = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
         transparent: true,
-        lightMap: light,
+        lightMap: lightTexture,
         blending: THREE.CustomBlending,
         blendEquation: THREE.AddEquation,
         blendSrc: THREE.SrcAlphaSaturateFactor,
         blendDst: THREE.OneMinusSrcColorFactor,
       }),
-    [light]
+    [lightTexture]
   );
 
-  const plane = useMemo(() => {
-    const plane = new THREE.Mesh(geometry, material);
-    plane.position.z = 0.01;
-    return plane;
-  }, [geometry, material]);
+  const lightPlane = useMemo(() => {
+    const lightPlane = new THREE.Mesh(plane, lightMaterial);
+    lightPlane.position.z = 0.01;
+    return lightPlane;
+  }, [plane, lightMaterial]);
 
-  const material2 = new THREE.MeshBasicMaterial({
+  const alphaMaterial = new THREE.MeshBasicMaterial({
     transparent: true,
-    alphaMap: overlay,
+    alphaMap: alphaTexture,
     blending: THREE.CustomBlending,
     blendEquation: THREE.ReverseSubtractEquation,
     blendSrc: THREE.OneMinusDstAlphaFactor,
     blendDst: THREE.SrcAlphaFactor,
   });
+  const alphaPlane = new THREE.Mesh(plane, alphaMaterial);
 
-  const plane2 = new THREE.Mesh(geometry, material2);
   const objLoader = useMemo(() => new OBJLoader(manager), [manager]);
-
   const shirtMaterial = new THREE.MeshStandardMaterial({
     transparent: true,
     depthWrite: false,
@@ -125,29 +119,30 @@ function App() {
   }, [spotlightShadowTarget]);
 
   const lightShadowTarget = useMemo(() => new THREE.Object3D(), []);
-  const lightShadow = useMemo(() => {
-    const lightShadow = new THREE.SpotLight(0xffffff);
-    lightShadow.position.set(0, -10, 25);
-    lightShadow.angle = Math.PI / 3;
-    lightShadow.castShadow = true;
-    lightShadow.shadow.mapSize.width = 64;
-    lightShadow.shadow.mapSize.height = 64;
-    lightShadow.shadow.camera.near = 8;
-    lightShadow.shadow.camera.far = 50;
-    lightShadow.target = lightShadowTarget;
-    lightShadow.target.position.x = 10;
-    lightShadow.target.position.y = 5;
-    return lightShadow;
-  }, [lightShadowTarget]);
+  const lightShadow = useMemo(() => new THREE.SpotLight(0xffffff), []);
+  lightShadow.position.set(0, -10, 25);
+  lightShadow.angle = Math.PI / 3;
+  lightShadow.castShadow = true;
+  lightShadow.shadow.mapSize.width = 64;
+  lightShadow.shadow.mapSize.height = 64;
+  lightShadow.shadow.camera.near = 8;
+  lightShadow.shadow.camera.far = 50;
+  lightShadow.target = lightShadowTarget;
+  lightShadow.target.position.x = 10;
+  lightShadow.target.position.y = 5;
 
-  const sphereGeometry = new THREE.SphereGeometry(10, 32, 32);
-  const sphereMaterial = new THREE.MeshStandardMaterial({
-    transparent: true,
-    opacity: 0,
-  });
+  const sphereGeometry = useMemo(() => new THREE.SphereGeometry(8, 32, 32), []);
+  const sphereMaterial = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        transparent: true,
+        opacity: 0,
+      }),
+    []
+  );
   const sphereShadow = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  sphereShadow.position.x = 8;
-  sphereShadow.position.y = -10;
+  sphereShadow.position.x = 6.5;
+  sphereShadow.position.y = -9;
   sphereShadow.position.z = 10;
   sphereShadow.castShadow = true;
   sphereShadow.receiveShadow = false;
@@ -160,11 +155,12 @@ function App() {
   }, [lightShadow, patternShadow, patternLightness]);
 
   useEffect(() => {
-    ambLight.intensity = patternLightness - patternShadow / 2;
+    ambLight.intensity = patternLightness - patternShadow * 0.75;
   }, [patternLightness, ambLight, patternShadow]);
 
   useEffect(() => {
     if (canvasRef.current && bgImageRef.current) {
+      setIsCanvasLoading(true);
       bgImageRef.current.src = `src/assets/${curPiece}/${curPiece}_front.png `;
       const scene = initScene(canvasRef.current);
       objLoader.load(
@@ -182,9 +178,10 @@ function App() {
           });
 
           manager.onLoad = () => {
+            setIsCanvasLoading(false);
             scene.add(
-              plane,
-              plane2,
+              lightPlane,
+              alphaPlane,
               ambLight,
               spotlight,
               spotlightShadowTarget,
@@ -194,12 +191,6 @@ function App() {
               object
             );
           };
-        },
-        (xhr) => {
-          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        (error) => {
-          console.log(error);
         }
       );
     }
@@ -208,28 +199,29 @@ function App() {
   return (
     <div className="flex flex-col items-center">
       <Interface />
-
-      <>
-        <canvas
-          style={{
-            filter: `hue-rotate(${patternHue}deg) saturate(${patternSaturation}) `,
-          }}
-          className={cn("mt-5 w-[90vh] aspect-square sm:h-auto")}
-          ref={canvasRef}
+      {isCanvasLoading && (
+        <SpinnerDiamond
+          color="#000"
+          className="fixed text-2xl font-bold top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2d"
         />
-
-        <div
-          id="image-cont"
-          className="absolute z-[2] aspect-square  mt-[60px] w-[90vh] sm:h-auto pointer-events-none"
-        >
-          <img
-            ref={bgImageRef}
-            alt="pattern"
-            className={cn("pointer-events-none")}
-            onLoad={() => setIsImageLoading(false)}
-          />
-        </div>
-      </>
+      )}
+      <canvas
+        style={{
+          filter: `hue-rotate(${patternHue}deg) saturate(${patternSaturation}) `,
+        }}
+        className={cn(
+          "mt-5 w-[90vh] aspect-square sm:h-auto",
+          isCanvasLoading && "opacity-0"
+        )}
+        ref={canvasRef}
+      />
+      <div className="absolute z-[2] aspect-square  mt-[60px] w-[90vh] sm:h-auto pointer-events-none">
+        <img
+          ref={bgImageRef}
+          alt="pattern"
+          className={cn("pointer-events-none", isCanvasLoading && "opacity-0")}
+        />
+      </div>
     </div>
   );
 }

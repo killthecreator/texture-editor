@@ -2,7 +2,6 @@ import * as THREE from "three";
 
 import store from "./../redux/store";
 import { setOffsetX, setOffsetY } from "./../redux/canvasSlice";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 const initScene = (canvas: HTMLCanvasElement) => {
   const scene = new THREE.Scene();
@@ -47,9 +46,7 @@ const initScene = (canvas: HTMLCanvasElement) => {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-  const controls = new OrbitControls(camera, renderer.domElement);
   const animate = () => {
-    controls.update();
     renderer.render(scene, camera);
     window.requestAnimationFrame(animate);
   };

@@ -2,7 +2,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   Slider,
@@ -16,6 +15,9 @@ import { Maximize, Sun, Layers, Palette, RefreshCw } from "lucide-react";
 import { RootState } from "./../redux/store";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useState } from "react";
+import { cn } from "./../lib/utils";
+
 import {
   setCurPiece,
   setScale,
@@ -25,6 +27,9 @@ import {
   setLightness,
   setShadow,
   setHighlight,
+  resetColors,
+  resetLights,
+  resetScale,
 } from "./../redux/canvasSlice";
 
 function degToRad(degrees: number) {
@@ -42,6 +47,8 @@ const Interface = () => {
     patternShadow,
     patternHighlight,
   } = useSelector((state: RootState) => state.canvas);
+
+  const [actveScale, setActiveScale] = useState("0");
 
   return (
     <NavigationMenu>
@@ -86,6 +93,7 @@ const Interface = () => {
               className="w-96 h-10"
               onValueChange={(value) => dispatch(setScale(value[0]))}
             />
+            <Button onClick={() => dispatch(resetScale())}>Reset</Button>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
@@ -97,30 +105,36 @@ const Interface = () => {
             <ul className="grid grid-cols-4 gap-3 p-6 md:w-[400px]">
               <li>
                 <Button
+                  className={cn(actveScale === "0" && "font-bold")}
                   value={0}
-                  onClick={(e) =>
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)))
-                  }
+                  onClick={(e) => {
+                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
+                    setActiveScale(e.currentTarget.value);
+                  }}
                 >
                   0°
                 </Button>
               </li>
               <li>
                 <Button
+                  className={cn(actveScale === "90" && "font-bold")}
                   value={90}
-                  onClick={(e) =>
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)))
-                  }
+                  onClick={(e) => {
+                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
+                    setActiveScale(e.currentTarget.value);
+                  }}
                 >
                   90°
                 </Button>
               </li>
               <li>
                 <Button
+                  className={cn(actveScale === "-90" && "font-bold")}
                   value={-90}
-                  onClick={(e) =>
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)))
-                  }
+                  onClick={(e) => {
+                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
+                    setActiveScale(e.currentTarget.value);
+                  }}
                 >
                   -90°
                 </Button>
@@ -128,10 +142,12 @@ const Interface = () => {
 
               <li>
                 <Button
+                  className={cn(actveScale === "180" && "font-bold")}
                   value={180}
-                  onClick={(e) =>
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)))
-                  }
+                  onClick={(e) => {
+                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
+                    setActiveScale(e.currentTarget.value);
+                  }}
                 >
                   180°
                 </Button>
@@ -147,7 +163,7 @@ const Interface = () => {
           <NavigationMenuContent className="p-6">
             <p>Hue</p>
             <Slider
-              defaultValue={[patternHue]}
+              value={[patternHue]}
               min={-180}
               max={180}
               step={10}
@@ -156,7 +172,7 @@ const Interface = () => {
             />
             <p>Saturation</p>
             <Slider
-              defaultValue={[patternSaturation]}
+              value={[patternSaturation]}
               min={0}
               max={2}
               step={0.1}
@@ -165,13 +181,14 @@ const Interface = () => {
             />
             <p>Lightness</p>
             <Slider
-              defaultValue={[patternLightness]}
+              value={[patternLightness]}
               min={0.5}
               max={1.5}
               step={0.1}
               className="w-96 h-10"
               onValueChange={(value) => dispatch(setLightness(value[0]))}
             />
+            <Button onClick={() => dispatch(resetColors())}>Reset</Button>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
@@ -182,7 +199,7 @@ const Interface = () => {
           <NavigationMenuContent className="p-6">
             <p>Shadow</p>
             <Slider
-              defaultValue={[patternShadow]}
+              value={[patternShadow]}
               min={0}
               max={0.7}
               step={0.01}
@@ -191,13 +208,14 @@ const Interface = () => {
             />
             <p>Highlight</p>
             <Slider
-              defaultValue={[patternHighlight]}
+              value={[patternHighlight]}
               min={0}
               max={1}
               step={0.01}
               className="w-96 h-10"
               onValueChange={(value) => dispatch(setHighlight(value[0]))}
             />
+            <Button onClick={() => dispatch(resetLights())}>Reset</Button>
           </NavigationMenuContent>
         </NavigationMenuItem>
       </NavigationMenuList>

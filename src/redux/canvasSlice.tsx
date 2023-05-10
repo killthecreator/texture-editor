@@ -64,6 +64,18 @@ export const canvasSlice = createSlice({
     setHighlight: (state, action: PayloadAction<number>) => {
       state.patternHighlight = action.payload;
     },
+    resetColors: (state) => {
+      state.patternHue = initialState.patternHue;
+      state.patternSaturation = initialState.patternSaturation;
+      state.patternLightness = initialState.patternLightness;
+    },
+    resetLights: (state) => {
+      state.patternHighlight = initialState.patternHighlight;
+      state.patternShadow = initialState.patternShadow;
+    },
+    resetScale: (state) => {
+      state.patternScale = initialState.patternScale;
+    },
   },
 });
 
@@ -78,5 +90,8 @@ export const {
   setLightness,
   setShadow,
   setHighlight,
+  resetColors,
+  resetLights,
+  resetScale,
 } = canvasSlice.actions;
 export default canvasSlice.reducer;
