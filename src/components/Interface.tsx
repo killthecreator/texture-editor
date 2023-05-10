@@ -107,7 +107,7 @@ const Interface = () => {
           <NavigationMenuContent className="p-6">
             <p>Scale</p>
             <Slider
-              defaultValue={[patternScale]}
+              value={[patternScale]}
               min={0.5}
               max={1.5}
               step={0.01}
