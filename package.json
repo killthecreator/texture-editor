@@ -1,0 +1,46 @@
+{
+  "name": "texture-editor",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@radix-ui/react-navigation-menu": "^1.1.2",
+    "@radix-ui/react-slider": "^1.1.1",
+    "@react-three/fiber": "^8.13.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "@types/dat.gui": "^0.7.9",
+    "@types/node": "^18.16.3",
+    "@types/three": "^0.151.0",
+    "class-variance-authority": "^0.6.0",
+    "dat.gui": "^0.7.9",
+    "lucide-react": "^0.211.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "tailwindcss-animate": "^1.0.5",
+    "three": "^0.152.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "autoprefixer": "^10.4.14",
+    "clsx": "^1.2.1",
+    "eslint": "^8.38.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.4",
+    "postcss": "^8.4.23",
+    "tailwind-merge": "^1.12.0",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2"
+  }
+}
