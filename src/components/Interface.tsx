@@ -41,10 +41,6 @@ const patterns = [
   { id: 2, val: "silk_scarf", src: scarf },
 ];
 
-function degToRad(degrees: number) {
-  return degrees * (Math.PI / 180);
-}
-
 const Interface = () => {
   const dispatch = useAppDispatch();
 
@@ -66,7 +62,7 @@ const Interface = () => {
         className="w-full"
         value={val}
         onClick={(e) => {
-          dispatch(setRotation(degToRad(+e.currentTarget.value)));
+          dispatch(setRotation(+e.currentTarget.value));
           setActiveScale(e.currentTarget.value);
         }}
       >

@@ -8,6 +8,10 @@ import initScene from "./utils/initScene";
 import { SpinnerDiamond } from "spinners-react";
 import { useAppSelector } from "./hooks/redux";
 
+function degToRad(degrees: number) {
+  return degrees * (Math.PI / 180);
+}
+
 function App() {
   const {
     curPiece,
@@ -57,7 +61,7 @@ function App() {
     pattern.wrapS = pattern.wrapT = THREE.RepeatWrapping;
     return pattern;
   }, [textureLoader]);
-  pattern.rotation = patternRotation;
+  pattern.rotation = degToRad(patternRotation);
   pattern.repeat.set(1 / patternScale, 0.5 / patternScale);
   pattern.offset.x = patternOffsetX;
   pattern.offset.y = patternOffsetY;

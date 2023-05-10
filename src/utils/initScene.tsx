@@ -29,8 +29,27 @@ const initScene = (canvas: HTMLCanvasElement) => {
   function movePattern(event: MouseEvent) {
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    store.dispatch(setOffsetX(-mouse.x));
-    store.dispatch(setOffsetY(-mouse.y));
+    const curRotation = store.getState().canvas.patternRotation;
+    console.log(curRotation);
+
+    switch (curRotation) {
+      case 0:
+        store.dispatch(setOffsetX(-mouse.x));
+        store.dispatch(setOffsetY(-mouse.y));
+        break;
+      case 90:
+        store.dispatch(setOffsetX(-mouse.y));
+        store.dispatch(setOffsetY(mouse.x));
+        break;
+      case -90:
+        store.dispatch(setOffsetX(mouse.y));
+        store.dispatch(setOffsetY(-mouse.x));
+        break;
+      case 180:
+        store.dispatch(setOffsetX(mouse.x));
+        store.dispatch(setOffsetY(mouse.y));
+        break;
+    }
   }
   window.addEventListener("mousedown", checkTarget, false);
 
