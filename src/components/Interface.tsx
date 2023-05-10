@@ -7,16 +7,15 @@ import {
   Slider,
   Button,
 } from "./../components/ui";
-
 import shirt from "./../assets/man_shirt/man_shirt_preview.png";
 import scarf from "./../assets/silk_scarf/silk_scarf_preview.png";
 
 import { Maximize, Sun, Layers, Palette, RefreshCw } from "lucide-react";
-import { RootState } from "./../redux/store";
-import { useDispatch, useSelector } from "react-redux";
 
 import { useState } from "react";
 import { cn } from "./../lib/utils";
+
+import { useAppDispatch, useAppSelector } from "./../hooks/redux";
 
 import {
   setCurPiece,
@@ -37,7 +36,7 @@ function degToRad(degrees: number) {
 }
 
 const Interface = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const {
     patternScale,
@@ -46,7 +45,7 @@ const Interface = () => {
     patternLightness,
     patternShadow,
     patternHighlight,
-  } = useSelector((state: RootState) => state.canvas);
+  } = useAppSelector((state) => state.canvas);
 
   const [actveScale, setActiveScale] = useState("0");
 

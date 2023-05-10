@@ -1,5 +1,4 @@
 import * as THREE from "three";
-
 import store from "./../redux/store";
 import { setOffsetX, setOffsetY } from "./../redux/canvasSlice";
 

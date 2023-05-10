@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "./redux/store";
+
 import { cn } from "./lib/utils";
 import * as THREE from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import Interface from "./components/Interface";
 import initScene from "./utils/initScene";
 import { SpinnerDiamond } from "spinners-react";
+import { useAppSelector } from "./hooks/redux";
 
 function App() {
   const {
@@ -20,7 +20,7 @@ function App() {
     patternLightness,
     patternShadow,
     patternHighlight,
-  } = useSelector((state: RootState) => state.canvas);
+  } = useAppSelector((state) => state.canvas);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const bgImageRef = useRef<HTMLImageElement>(null);
