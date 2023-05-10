@@ -104,7 +104,8 @@ const Interface = () => {
             <ul className="grid grid-cols-4 gap-3 p-6 md:w-[400px]">
               <li>
                 <Button
-                  className={cn(actveScale === "0" && "font-bold")}
+                  variant={actveScale === "0" ? "default" : "secondary"}
+                  className="w-full"
                   value={0}
                   onClick={(e) => {
                     dispatch(setRotation(degToRad(+e.currentTarget.value)));
@@ -116,7 +117,8 @@ const Interface = () => {
               </li>
               <li>
                 <Button
-                  className={cn(actveScale === "90" && "font-bold")}
+                  variant={actveScale === "90" ? "default" : "secondary"}
+                  className="w-full"
                   value={90}
                   onClick={(e) => {
                     dispatch(setRotation(degToRad(+e.currentTarget.value)));
@@ -128,7 +130,8 @@ const Interface = () => {
               </li>
               <li>
                 <Button
-                  className={cn(actveScale === "-90" && "font-bold")}
+                  variant={actveScale === "-90" ? "default" : "secondary"}
+                  className="w-full"
                   value={-90}
                   onClick={(e) => {
                     dispatch(setRotation(degToRad(+e.currentTarget.value)));
@@ -141,7 +144,8 @@ const Interface = () => {
 
               <li>
                 <Button
-                  className={cn(actveScale === "180" && "font-bold")}
+                  variant={actveScale === "180" ? "default" : "secondary"}
+                  className="w-full"
                   value={180}
                   onClick={(e) => {
                     dispatch(setRotation(degToRad(+e.currentTarget.value)));
@@ -166,7 +170,7 @@ const Interface = () => {
               min={-180}
               max={180}
               step={10}
-              className="w-96 h-10"
+              className="w-96 h-10 "
               onValueChange={(value) => dispatch(setHue(value[0]))}
             />
             <p>Saturation</p>

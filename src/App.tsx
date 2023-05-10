@@ -205,6 +205,7 @@ function App() {
           className="fixed text-2xl font-bold top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2d"
         />
       )}
+
       <canvas
         style={{
           filter: `hue-rotate(${patternHue}deg) saturate(${patternSaturation}) `,
