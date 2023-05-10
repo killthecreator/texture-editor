@@ -11,9 +11,7 @@ import shirt from "./../assets/man_shirt/man_shirt_preview.png";
 import scarf from "./../assets/silk_scarf/silk_scarf_preview.png";
 
 import { Maximize, Sun, Layers, Palette, RefreshCw } from "lucide-react";
-
 import { useState } from "react";
-import { cn } from "./../lib/utils";
 
 import { useAppDispatch, useAppSelector } from "./../hooks/redux";
 
@@ -30,6 +28,18 @@ import {
   resetLights,
   resetScale,
 } from "./../redux/canvasSlice";
+
+const rotations = [
+  { id: 1, val: 0 },
+  { id: 2, val: 90 },
+  { id: 3, val: -90 },
+  { id: 4, val: 180 },
+];
+
+const patterns = [
+  { id: 1, val: "man_shirt", src: shirt },
+  { id: 2, val: "silk_scarf", src: scarf },
+];
 
 function degToRad(degrees: number) {
   return degrees * (Math.PI / 180);
@@ -49,6 +59,33 @@ const Interface = () => {
 
   const [actveScale, setActiveScale] = useState("0");
 
+  const scaleItems = rotations.map(({ id, val }) => (
+    <li key={id}>
+      <Button
+        variant={actveScale === `${val}` ? "default" : "secondary"}
+        className="w-full"
+        value={val}
+        onClick={(e) => {
+          dispatch(setRotation(degToRad(+e.currentTarget.value)));
+          setActiveScale(e.currentTarget.value);
+        }}
+      >
+        {`${val}°`}
+      </Button>
+    </li>
+  ));
+
+  const patternItems = patterns.map(({ id, val, src }) => (
+    <li key={id} className="cursor-pointer hover:scale-105">
+      <button
+        value={val}
+        onClick={(e) => dispatch(setCurPiece(e.currentTarget.value))}
+      >
+        <img src={src} alt={val} />
+      </button>
+    </li>
+  ));
+
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -58,22 +95,7 @@ const Interface = () => {
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid grid-cols-2 gap-3 p-6 md:w-[400px]">
-              <div className="cursor-pointer hover:scale-105">
-                <button
-                  value="man_shirt"
-                  onClick={(e) => dispatch(setCurPiece(e.currentTarget.value))}
-                >
-                  <img src={shirt} alt="man_shirt" />
-                </button>
-              </div>
-              <div className="cursor-pointer hover:scale-105">
-                <button
-                  value="silk_scarf"
-                  onClick={(e) => dispatch(setCurPiece(e.currentTarget.value))}
-                >
-                  <img src={scarf} alt="silk_scarf" />
-                </button>
-              </div>
+              {patternItems}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -102,59 +124,7 @@ const Interface = () => {
           </NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid grid-cols-4 gap-3 p-6 md:w-[400px]">
-              <li>
-                <Button
-                  variant={actveScale === "0" ? "default" : "secondary"}
-                  className="w-full"
-                  value={0}
-                  onClick={(e) => {
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
-                    setActiveScale(e.currentTarget.value);
-                  }}
-                >
-                  0°
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant={actveScale === "90" ? "default" : "secondary"}
-                  className="w-full"
-                  value={90}
-                  onClick={(e) => {
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
-                    setActiveScale(e.currentTarget.value);
-                  }}
-                >
-                  90°
-                </Button>
-              </li>
-              <li>
-                <Button
-                  variant={actveScale === "-90" ? "default" : "secondary"}
-                  className="w-full"
-                  value={-90}
-                  onClick={(e) => {
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
-                    setActiveScale(e.currentTarget.value);
-                  }}
-                >
-                  -90°
-                </Button>
-              </li>
-
-              <li>
-                <Button
-                  variant={actveScale === "180" ? "default" : "secondary"}
-                  className="w-full"
-                  value={180}
-                  onClick={(e) => {
-                    dispatch(setRotation(degToRad(+e.currentTarget.value)));
-                    setActiveScale(e.currentTarget.value);
-                  }}
-                >
-                  180°
-                </Button>
-              </li>
+              {scaleItems}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
