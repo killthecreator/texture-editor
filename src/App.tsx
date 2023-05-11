@@ -66,6 +66,18 @@ function App() {
   pattern.offset.x = patternOffsetX;
   pattern.offset.y = patternOffsetY;
 
+  /* 'I have front layer (the one with actual image of a guy/hanger) separated from 
+  canvas with three js. it was made to have ability to change hue of the pattern. 
+  I couldn't find another way to dinamically change it with three js. it has setHSL 
+  function, it didn't work as i needed, so had to make a workaround like this. 
+  So i made two separate layers - one with front image as img tag 
+  and another one with a canvas. they have the same size and made one 
+  on top of another with css. So basically they should have been ideally 
+  matched, but somehow it didn't happen. To fix that i changed a three 
+  js scene camera parametres a little and sizes of three js planes that 
+  i used for layers so they finally matched together' */
+
+  /* Initial plane configuration was (50, 50, 50). For camera configuration check initScene.tsx file */
   const plane = useMemo(() => new THREE.PlaneGeometry(45, 45, 50), []);
   const lightMaterial = useMemo(
     () =>
@@ -169,7 +181,7 @@ function App() {
   }, [lightShadow, patternShadow, patternLightness]);
 
   useEffect(() => {
-    ambLight.intensity = patternLightness - patternShadow * 0.75;
+    ambLight.intensity = patternLightness - patternShadow * 0.65;
   }, [patternLightness, ambLight, patternShadow]);
 
   useEffect(() => {

@@ -4,6 +4,19 @@ import { setOffsetX, setOffsetY } from "./../redux/canvasSlice";
 
 const initScene = (canvas: HTMLCanvasElement) => {
   const scene = new THREE.Scene();
+
+  /* 'I have front layer (the one with actual image of a guy/hanger) separated from 
+  canvas with three js. it was made to have ability to change hue of the pattern. 
+  I couldn't find another way to dinamically change it with three js. it has setHSL 
+  function, it didn't work as i needed, so had to make a workaround like this. 
+  So i made two separate layers - one with front image as img tag 
+  and another one with a canvas. they have the same size and made one 
+  on top of another with css. So basically they should have been ideally 
+  matched, but somehow it didn't happen. To fix that i changed a three 
+  js scene camera parametres a little and sizes of three js planes that 
+  i used for layers so they finally matched together' */
+
+  /* Initial camera configuration was (25, 1 / 1). For plane configuration check App.tsx file */
   const camera = new THREE.PerspectiveCamera(25.9, 1 / 1);
 
   const raycaster = new THREE.Raycaster();
