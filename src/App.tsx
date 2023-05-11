@@ -72,6 +72,7 @@ function App() {
       new THREE.MeshBasicMaterial({
         transparent: true,
         lightMap: lightTexture,
+        depthWrite: false,
         blending: THREE.CustomBlending,
         blendEquation: THREE.AddEquation,
         blendSrc: THREE.SrcAlphaSaturateFactor,
@@ -82,29 +83,39 @@ function App() {
 
   const lightPlane = useMemo(() => {
     const lightPlane = new THREE.Mesh(plane, lightMaterial);
-    lightPlane.position.z = 0.01;
+    lightPlane.position.z = 3;
     return lightPlane;
   }, [plane, lightMaterial]);
 
-  const alphaMaterial = new THREE.MeshBasicMaterial({
-    transparent: true,
-    alphaMap: alphaTexture,
-    blending: THREE.CustomBlending,
-    blendEquation: THREE.ReverseSubtractEquation,
-    blendSrc: THREE.OneMinusDstAlphaFactor,
-    blendDst: THREE.SrcAlphaFactor,
-  });
-  const alphaPlane = new THREE.Mesh(plane, alphaMaterial);
+  const alphaMaterial = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        transparent: true,
+        alphaMap: alphaTexture,
+        blending: THREE.CustomBlending,
+        blendEquation: THREE.ReverseSubtractEquation,
+        blendSrc: THREE.OneMinusDstAlphaFactor,
+        blendDst: THREE.SrcAlphaFactor,
+      }),
+
+    [alphaTexture]
+  );
+  const alphaPlane = useMemo(() => {
+    const alphaPlane = new THREE.Mesh(plane, alphaMaterial);
+    alphaPlane.position.z = 2;
+    return alphaPlane;
+  }, [plane, alphaMaterial]);
 
   const objLoader = useMemo(() => new OBJLoader(manager), [manager]);
   const shirtMaterial = new THREE.MeshStandardMaterial({
     transparent: true,
-    depthWrite: false,
     map: pattern,
+    depthTest: true,
   });
 
   const ambLight = useMemo(() => {
     const ambLight = new THREE.AmbientLight(0xffffff);
+
     return ambLight;
   }, []);
 

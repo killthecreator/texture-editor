@@ -4,7 +4,7 @@ import { setOffsetX, setOffsetY } from "./../redux/canvasSlice";
 
 const initScene = (canvas: HTMLCanvasElement) => {
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(25, 1 / 1);
+  const camera = new THREE.PerspectiveCamera(24, 1 / 1);
 
   const raycaster = new THREE.Raycaster();
   const mouse = new THREE.Vector2();
@@ -58,6 +58,7 @@ const initScene = (canvas: HTMLCanvasElement) => {
     canvas,
     antialias: true,
     alpha: true,
+    logarithmicDepthBuffer: true,
   });
   renderer.setSize(canvas.offsetWidth, canvas.offsetHeight);
   renderer.shadowMap.enabled = true;
