@@ -66,7 +66,7 @@ function App() {
   pattern.offset.x = patternOffsetX;
   pattern.offset.y = patternOffsetY;
 
-  const plane = useMemo(() => new THREE.PlaneGeometry(50, 50, 50), []);
+  const plane = useMemo(() => new THREE.PlaneGeometry(45, 45, 50), []);
   const lightMaterial = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
@@ -115,7 +115,6 @@ function App() {
 
   const ambLight = useMemo(() => {
     const ambLight = new THREE.AmbientLight(0xffffff);
-
     return ambLight;
   }, []);
 
