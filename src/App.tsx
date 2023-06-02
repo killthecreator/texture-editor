@@ -40,7 +40,8 @@ function App() {
 
   const alphaTexture = useMemo(() => {
     const alphaTexture = textureLoader.load(
-      `src/assets/${curPiece}/${curPiece}_overlay.png`
+      new URL(`./assets/${curPiece}/${curPiece}_overlay.png`, import.meta.url)
+        .href
     );
     alphaTexture.encoding = THREE.sRGBEncoding;
     return alphaTexture;
@@ -48,14 +49,17 @@ function App() {
 
   const lightTexture = useMemo(() => {
     const lightTexture = textureLoader.load(
-      `src/assets/${curPiece}/${curPiece}_light.png`
+      new URL(`./assets/${curPiece}/${curPiece}_light.png`, import.meta.url)
+        .href
     );
     lightTexture.encoding = THREE.sRGBEncoding;
     return lightTexture;
   }, [curPiece, textureLoader]);
 
   const pattern = useMemo(() => {
-    const pattern = textureLoader.load("src/assets/patterns/1_texture_3d.jpg");
+    const pattern = textureLoader.load(
+      new URL("./assets/patterns/1_texture_3d.jpg", import.meta.url).href
+    );
     pattern.encoding = THREE.sRGBEncoding;
     pattern.center.set(0.5, 0.5);
     pattern.wrapS = pattern.wrapT = THREE.RepeatWrapping;
@@ -187,10 +191,16 @@ function App() {
   useEffect(() => {
     if (canvasRef.current && bgImageRef.current) {
       setIsCanvasLoading(true);
-      bgImageRef.current.src = `src/assets/${curPiece}/${curPiece}_front.png `;
+      bgImageRef.current.src = new URL(
+        `./assets/${curPiece}/${curPiece}_front.png`,
+        import.meta.url
+      ).href;
       const scene = initScene(canvasRef.current);
       objLoader.load(
-        `src/assets/${curPiece}/${curPiece}_3d_model.obj`,
+        new URL(
+          `./assets/${curPiece}/${curPiece}_3d_model.obj`,
+          import.meta.url
+        ).href,
         (object) => {
           object.scale.set(patternScale + 24, patternScale + 24, 1);
           object.traverse((child) => {
